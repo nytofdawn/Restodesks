@@ -1,0 +1,131 @@
+/* General Styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #74ebd5 0%, #ACB6E5 100%);
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    display: flex;
+    height: 100vh;
+}
+
+/* Sidebar Styles */
+.sidebar {
+    width: 240px;
+    height: 100vh;
+    background-color: #cfd8dc;
+    color: #333;
+    padding-top: 20px;
+    box-shadow: 3px 0 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+.sidebar h2 {
+    font-size: 24px;
+    color: #000;
+    margin-bottom: 20px;
+}
+
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.sidebar button {
+    width: 90%;
+    padding: 15px;
+    background-color: #b0bec5;
+    border: none;
+    color: #455a64;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-bottom: 15px;
+    transition: background-color 0.3s ease;
+    font-weight: bold;
+}
+
+.sidebar button:hover {
+    background-color: #90a4ae;
+}
+
+.sidebar button.logout {
+    background-color: #e57373;
+    color: #fff;
+    margin-top: 30px;
+}
+
+.sidebar button.logout:hover {
+    background-color: #ef5350;
+}
+
+/* Main Content Styles */
+.main-content {
+    flex: 1;
+    padding: 20px;
+    background-color: #74ebd5;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+h1 {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Table Container Styles */
+.table-container {
+    max-height: 400px; /* Adjust the height as needed */
+    overflow-y: auto; /* Enables vertical scrolling */
+    margin-top: 20px;
+    width: 100%;
+}
+
+/* Table Styles */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+th, td {
+    padding: 10px;
+    border: 1px solid black;
+    text-align: left;
+}
+
+th {
+    background-color: #455a64;
+    color: white;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* Action Select Styles */
+.action-select {
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #d78943;
+    background-color: #fff;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.action-select option {
+    padding: 10px;
+    background-color: #fff;
+}

@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POS Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+
+    <div class="container">
+        <div class="sidebar">
+            <div>
+                <h2 style="color: #000000; margin-bottom: 20px; text-align: center;">Dashboard</h2>
+                <a href="dashboard.html">
+                    <button><i class="fas fa-home"></i> Dashboard</button>
+                </a>
+                <a href="additem.html">
+                    <button><i class="fas fa-plus-circle"></i> Add Item</button>
+                </a>
+                <a href="listitem.html">
+                    <button><i class="fas fa-list"></i> List Item</button>
+                </a>
+                <a href="order.html">
+                    <button><i class="fas fa-shopping-cart"></i> Booking</button>
+                </a>
+                <a href="table.html">
+                    <button><i class="fas fa-table"></i> Table</button>
+                </a>
+                <a href="description.html">
+                    <button><i class="fas fa-info-circle"></i> Description</button>
+                </a>
+                <a href="menu.html">
+                    <button><i class="fas fa-utensils"></i> Menu</button>
+                </a>
+            </div>
+            <a href="index.html"><button class="logout"><i class="fas fa-sign-out-alt"></i> Logout</button></a>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main">
+            <div class="grid" id="itemGrid">
+                <!-- Items will be dynamically added here -->
+            </div>
+
+            <!-- Order Section -->
+            <div class="order-section">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Item</th>
+                            <th>Qty</th>
+                            <th>Price</th>
+                        </tr>
+                    </thead>
+                    <tbody id="orderItems">
+                    </tbody>
+                </table>
+
+                <div class="buttons">
+                    <button onclick="pay()">Pay</button>
+                    <button onclick="printReceipt()">Print</button>
+                    <button onclick="nextStep()">Next</button>
+                </div>
+
+                <div class="totals">
+                    <label>Total:</label><input type="text" value="₱0.00" id="totalAmount" disabled><br>
+                    <label>Cash:</label><input type="text" id="cashInput"><br>
+                    <label>Balance:</label><input type="text" value="₱0.00" id="balance" disabled>
+                </div>
+
+                <!-- QR Scanner Input Box -->
+                <div class="qr-scanner">
+                    <label for="qrInput">Scan QR Code</label><br>
+                    <input type="text" id="qrInput" placeholder="Scan or input QR code here">
+                </div>
+
+                <!-- QR Code Buttons -->
+                <div class="qr-buttons">
+                    <button onclick="clickQR()">Click</button>
+                    <button class="clear" onclick="clearQR()">Clear</button>
+                </div>
+
+                <div class="receipt" id="receipt">
+                    <h3>Receipt</h3>
+                    <p id="receiptDate"></p>
+                    <p id="receiptTime"></p>
+                    <p id="receiptContent"></p>
+                    <!-- Cash and Balance on the Receipt -->
+                    <p id="receiptCash"></p>
+                    <p id="receiptBalance"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let order = [];
+        let total = 0;
+
+        // Fetch items from the backend API
+        async function fetchItems() {
+            try {
+                const response = await fetch('http://localhost:3000/api/items'); // Ensure this is pointing to the correct URL
+                const items = await response.json();
+                displayItems(items);  // Call function to display items on the dashboard
+            } catch (error) {
+                console.error('Error fetching items:', error);
+            }
+        }
+
+        // Function to display items in grid
+        function displayItems(items) {
+            const itemGrid = document.getElementById('itemGrid');
+            itemGrid.innerHTML = ''; // Clear existing items
+
+            items.forEach(item => {
+                const itemElement = document.createElement('div');
+                itemElement.className = 'grid-item';
+                itemElement.setAttribute('data-price', item.price);
+                itemElement.setAttribute('data-name', item.name);
+
+                // Construct the image path dynamically from the backend image field
+                const imagePath = `uploads/${item.image}`;  // Assuming images are stored in the 'uploads' folder
+                
+                // Add event listener to the item for adding it to the order
+                itemElement.onclick = () => addItem(itemElement);
+
+                itemElement.innerHTML = `
+                    <img src="${imagePath}" alt="${item.name}">
+                    <p>${item.name}</p>
+                `;
+
+                itemGrid.appendChild(itemElement); // Append item to grid
+            });
+        }
+
+        // Add item to the order (when clicked in the grid)
+        function addItem(element) {
+            const itemName = element.querySelector('p').textContent;
+            const price = parseFloat(element.getAttribute('data-price'));
+
+            const existingItem = order.find(item => item.name === itemName);
+
+            if (existingItem) {
+                existingItem.qty += 1;  // Increase quantity if item already in order
+                total += price;  // Add price to the total
+            } else {
+                const itemId = order.length + 1;
+                order.push({ id: itemId, name: itemName, price: price, qty: 1 });
+                total += price;  // Add price to the total
+            }
+
+            updateOrder();  // Update the order details table
+        }
+
+        // Update the order table and total amount
+        function updateOrder() {
+            const orderItemsTable = document.getElementById('orderItems');
+            orderItemsTable.innerHTML = '';  // Clear existing order items
+
+            // Loop through the order and display it in the table
+            order.forEach(item => {
+                const row = `
+                    <tr>
+                        <td>${item.id}</td>
+                        <td>${item.name}</td>
+                        <td>${item.qty}</td>
+                        <td>₱${(item.price * item.qty).toFixed(2)}</td>
+                    </tr>
+                `;
+                orderItemsTable.innerHTML += row;  // Append item row to table
+            });
+
+            // Update total amount
+            document.getElementById('totalAmount').value = `₱${total.toFixed(2)}`;
+            updateBalance();  // Update balance after adding items
+        }
+
+        // Update balance based on cash input
+        function updateBalance() {
+            const cashInput = parseFloat(document.getElementById('cashInput').value) || 0;
+            const balance = cashInput - total;
+            document.getElementById('balance').value = `₱${balance.toFixed(2)}`;
+        }
+
+        // Handle payment
+        function pay() {
+            if (total > 0) {
+                const receiptDate = new Date();
+                document.getElementById('receiptDate').textContent = receiptDate.toLocaleDateString();
+                document.getElementById('receiptTime').textContent = receiptDate.toLocaleTimeString();
+
+                // Updated: Remove price from the receipt content
+                const receiptContent = order.map(item =>
+                    `${item.name} (x${item.qty})`  // Only display name and quantity, no price
+                ).join('<br>');
+
+                const totalFormatted = `₱${total.toFixed(2)}`;
+                const cash = document.getElementById('cashInput').value;
+                const balance = document.getElementById('balance').value;
+
+                // Include Cash and Balance in the receipt
+                document.getElementById('receiptContent').innerHTML = `${receiptContent}<br><br><strong>Total: ${totalFormatted}</strong>`;
+                document.getElementById('receiptCash').innerHTML = `<strong>Cash: </strong>${cash}`;
+                document.getElementById('receiptBalance').innerHTML = `<strong>Balance: </strong>${balance}`;
+
+                document.getElementById('receipt').style.display = 'block';  // Display the receipt
+            } else {
+                alert("No items in the order.");
+            }
+        }
+
+        // Print receipt
+        function printReceipt() {
+            const receipt = document.getElementById('receipt');
+            receipt.style.display = 'block';  // Ensure receipt is visible
+
+            const printWindow = window.open('', '_blank', 'height=600,width=800');
+            const receiptDate = document.getElementById('receiptDate').textContent;
+            const receiptTime = document.getElementById('receiptTime').textContent;
+            const receiptContent = document.getElementById('receiptContent').innerHTML;
+            const receiptCash = document.getElementById('receiptCash').innerHTML;
+            const receiptBalance = document.getElementById('receiptBalance').innerHTML;
+
+            printWindow.document.write('<html><head><title>Receipt</title><style>body{font-family: Arial, sans-serif; font-size: 14px;}</style></head><body>');
+            printWindow.document.write('<h3>Receipt</h3>');
+            printWindow.document.write(`<p><strong>Date:</strong> ${receiptDate}</p>`);
+            printWindow.document.write(`<p><strong>Time:</strong> ${receiptTime}</p>`);
+            printWindow.document.write('<p><strong>Items:</strong></p>');
+            printWindow.document.write(receiptContent);
+            printWindow.document.write('<br><hr>');
+            printWindow.document.write(`<p><strong>Total:</strong> ${document.getElementById('totalAmount').value}</p>`);
+            printWindow.document.write(`<p>${receiptCash}</p>`);
+            printWindow.document.write(`<p>${receiptBalance}</p>`);
+            printWindow.document.write('</body></html>');
+
+            printWindow.document.close();  // Close the document to finish it
+            printWindow.print();  // Trigger the print dialog
+            printWindow.close();  // Close the print window
+
+            receipt.style.display = 'none';  // Hide the receipt again
+        }
+
+        // Reset order and proceed to next step
+        function nextStep() {
+            order = [];
+            total = 0;
+            updateOrder();
+            document.getElementById('cashInput').value = '';
+            document.getElementById('balance').value = '₱0.00';
+            alert("Next step clicked! Order cleared.");
+        }
+
+        // QR Code functions
+        function clickQR() {
+            const qrInput = document.getElementById('qrInput').value;
+
+            // Display the QR code value in a print window
+            const printWindow = window.open('', '_blank', 'height=600,width=800');
+            printWindow.document.write('<html><head><title>QR Code Input</title><style>body{font-family: Arial, sans-serif; font-size: 14px;}</style></head><body>');
+            printWindow.document.write('<h3>QR Code Input</h3>');
+            printWindow.document.write(`<p><strong>QR Code Input:</strong> ${qrInput}</p>`);
+            printWindow.document.write('</body></html>');
+            printWindow.document.close();
+            printWindow.print();
+        }
+
+        // Clear QR input field
+        function clearQR() {
+            document.getElementById('qrInput').value = '';  // Clear QR input
+        }
+
+        // Call the fetchItems function to load items
+        fetchItems();
+    </script>
+
+</body>
+</html>

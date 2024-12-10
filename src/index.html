@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link rel="stylesheet" href="../css/index.css">
+</head>
+<body>
+    <div class="left-side">
+        <div class="rrms-logo">
+            <h1>ADMIN</h1>
+            <p></p> 
+        </div>
+    </div>
+    <div class="login-box">
+        <h2>Login</h2>
+        <form id="login-form">
+            <div class="textbox">
+                <input type="email" id="email" placeholder="Enter your email" required>
+            </div>
+            <div class="textbox">
+                <input type="password" id="password" placeholder="Password" required>
+            </div>
+            <button id="submit" class="btn" type="submit">Login</button>
+        </form>
+        <p>Don't have an account? <a href="register.html">Register now</a></p>
+    </div>
+
+    <!-- Modal for displaying error messages -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <p id="modal-message"></p>
+            <button id="ok-button" class="btn-ok">OK</button>
+        </div>
+    </div>
+
+    <!-- Modal for success message -->
+    <div id="success-modal" class="modal">
+        <div class="modal-content">
+            <p id="success-message">Success! You are logged in.</p>
+            <button id="success-ok-button" class="btn-ok">OK</button>
+        </div>
+    </div>
+
+    <script src="../js/index.js"></script>
+</body>
+</html>

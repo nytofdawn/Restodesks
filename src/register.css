@@ -1,0 +1,181 @@
+/* General reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+/* Full body styling */
+body {
+    display: flex;
+    justify-content: space-between; /* Distribute space between the left and right sides */
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #74ebd5 0%, #ACB6E5 100%);
+}
+
+/* Left side styling for RRMS logo */
+.left-side {
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(135deg, #333 0%, #555 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.rrms-logo {
+    text-align: center;
+}
+
+.rrms-logo h1 {
+    font-size: 80px;
+    color: #ffffff;
+    font-family: 'Roboto', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 10px;
+}
+
+/* Right side styling for Register box */
+.register-box {
+    width: 300px; /* Consistent width with the login box */
+    padding: 30px;
+    background: rgba(255, 255, 255, 0.9); /* Same semi-transparent white background */
+    border-radius: 10px;
+    box-shadow: 0px 15px 30px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    margin-right: 5%;
+    
+    /* Center the register box */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: auto;
+}
+
+/* Register box heading */
+.register-box h2 {
+    margin-bottom: 20px;
+    color: #333;
+    font-size: 22px; /* Same as login box */
+    font-weight: 700;
+}
+
+/* Input field styling */
+.textbox {
+    margin-bottom: 15px;
+    position: relative;
+}
+.admin-text {
+    font-size: 16px; /* Adjust font size as needed */
+    color: #ffffff;  /* White color to match the logo */
+    margin-top: 5px; /* Space above the text */
+    margin-bottom: 15px; /* Space below the text */
+    text-transform: uppercase; /* Uppercase for consistency */
+    text-align: center; /* Center align the text */
+}
+
+
+.textbox input {
+    width: 100%;
+    padding: 12px;
+    background: #f0f0f0;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    outline: none;
+    box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Button styling */
+.btn {
+    width: 100%;
+    padding: 12px;
+    background-color: #74ebd5;
+    border: none;
+    border-radius: 5px;
+    color: rgb(0, 0, 0);
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #66d4c1;
+}
+
+/* Register link styling */
+p {
+    margin-top: 15px;
+    color: #333;
+    font-size: 14px;
+}
+
+p a {
+    color: #74ebd5;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+p a:hover {
+    color: #66d4c1;
+}
+
+/* Modal styling */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.2);
+    justify-content: center;
+}
+
+.modal-content p {
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+.btn-ok {
+    background-color: #74ebd5;
+    padding: 10px 20px;
+    border: none;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    justify-content: center;
+}
+
+.btn-ok:hover {
+    background-color: #66d4c1;
+}
+#message {
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    padding: 10px;
+    margin-top: 10px;
+}
+
+.success {
+    color: green;
+}
+
+.error {
+    color: red;
+}

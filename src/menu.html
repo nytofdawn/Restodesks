@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Styled Sidebar with Input Form and Table</title>
+    <link rel="stylesheet" href="../css/menu.css"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Font Awesome for icons -->
+</head>
+<body>
+
+    
+    <div class="sidebar">
+        <h2>Adding menu</h2>
+        <div>
+            <a href="dashboard.html"><button><i class="fas fa-home"></i> Dashboard</button></a>
+            <a href="additem.html"><button><i class="fas fa-plus-circle"></i> Add Item</button></a>
+            <a href="listitem.html"><button><i class="fas fa-list"></i> List Item</button></a>
+            <a href="order.html"><button><i class="fas fa-shopping-cart"></i>Booking</button></a>
+            <a href="table.html"><button><i class="fas fa-table"></i> Table</button></a>
+            <a href="description.html"><button><i class="fas fa-info-circle"></i> Description</button></a>
+            <a href="menu.html"><button><i class="fas fa-utensils"></i> Menu</button></a>
+        </div>
+        <a href="index.html"><button class="logout"><i class="fas fa-sign-out-alt"></i> Logout</button></a>
+    </div>
+
+    
+    <div class="main-content">
+        <h1>Menu</h1>
+
+        
+        <div class="input-container">
+            <label for="menu-name">Menu Name:</label>
+            <input type="text" id="menu-name" placeholder="Enter menu name">
+
+            <label for="menu-price">Price:</label>
+            <input type="text" id="menu-price" placeholder="Enter menu price">
+
+            <label for="menu-image">Upload Image:</label>
+            <input type="file" id="menu-image" accept="image/*">
+
+            <button class="add-button" onclick="addMenu()">Add Menu</button>
+        </div>
+
+       
+        <table>
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="menu-table-body">
+               
+                <tr>
+                    <td><img src="path-to-image" alt="Menu Image" width="60" height="60" style="object-fit: cover;"></td>
+                    <td>Menu 1</td>
+                    <td>₱10</td>
+                    <td>
+                        <button class="edit-button" onclick="editMenu(this)">Edit</button>
+                        <button class="delete-button" onclick="deleteMenu(this)">Delete</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        
+        function addMenu() {
+            const name = document.getElementById('menu-name').value;
+            const price = document.getElementById('menu-price').value;
+            const image = document.getElementById('menu-image').files[0];
+            const tableBody = document.getElementById('menu-table-body');
+
+            
+            const row = document.createElement('tr');
+
+            
+            const imageCell = document.createElement('td');
+            const img = document.createElement('img');
+            img.src = image ? URL.createObjectURL(image) : ''; 
+            img.alt = 'Menu Image';
+            img.style.width = '60px';
+            img.style.height = '60px';
+            img.style.objectFit = 'cover';
+            imageCell.appendChild(img);
+
+            
+            const nameCell = document.createElement('td');
+            nameCell.textContent = name;
+
+            const priceCell = document.createElement('td');
+            priceCell.textContent = price;
+
+            
+            const actionsCell = document.createElement('td');
+            actionsCell.innerHTML = `
+                <button class="edit-button" onclick="editMenu(this)">Edit</button>
+                <button class="delete-button" onclick="deleteMenu(this)">Delete</button>
+            `;
+
+            
+            row.appendChild(imageCell);
+            row.appendChild(nameCell);
+            row.appendChild(priceCell);
+            row.appendChild(actionsCell);
+
+           
+            tableBody.appendChild(row);
+
+          
+            document.getElementById('menu-name').value = '';
+            document.getElementById('menu-price').value = '';
+            document.getElementById('menu-image').value = '';
+        }
+
+       
+        function editMenu(button) {
+            const row = button.closest('tr');
+            const nameCell = row.querySelector('td:nth-child(2)');
+            const priceCell = row.querySelector('td:nth-child(3)');
+            const imgCell = row.querySelector('td:nth-child(1) img');
+
+          
+            document.getElementById('menu-name').value = nameCell.textContent;
+            document.getElementById('menu-price').value = priceCell.textContent;
+            
+        
+            document.getElementById('menu-image').dataset.currentImage = imgCell.src;
+
+         
+            const addButton = document.querySelector('.add-button');
+            addButton.textContent = 'Update Menu';
+            addButton.setAttribute('onclick', 'updateMenu(this)');
+
+            
+            addButton.dataset.row = row;
+        }
+
+       
+        function updateMenu(button) {
+            const row = button.dataset.row;
+            const nameCell = row.querySelector('td:nth-child(2)');
+            const priceCell = row.querySelector('td:nth-child(3)');
+            const imgCell = row.querySelector('td:nth-child(1) img');
+
+            const newName = document.getElementById('menu-name').value;
+            const newPrice = document.getElementById('menu-price').value;
+            const newImage = document.getElementById('menu-image').files[0];
+
+            
+            nameCell.textContent = newName;
+            priceCell.textContent = newPrice;
+
+            
+            if (newImage) {
+                imgCell.src = URL.createObjectURL(newImage);
+            }
+
+            button.textContent = 'Add Menu';
+            button.setAttribute('onclick', 'addMenu()');
+
+            document.getElementById('menu-name').value = '';
+            document.getElementById('menu-price').value = '';
+            document.getElementById('menu-image').value = '';
+        }
+
+        
+        function deleteMenu(button) {
+            const row = button.closest('tr');
+            row.remove();
+        }
+    </script>
+
+</body>
+</html>

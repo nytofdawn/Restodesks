@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Design Example</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f0a55e;
+        }
+        .container {
+            display: flex;
+            height: 100vh;
+            background-color: #e5a557; /* light orange */
+        }
+        /* Sidebar styling */
+        .sidebar {
+            width: 20%;
+            background-color: #d78943;
+            padding: 20px;
+            display: flex;
+            flex-direction: column; /* Ensure vertical stacking */
+            justify-content: space-between;
+            box-shadow: 3px 0 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .sidebar button {
+            background-color: transparent;
+            border: none;
+            color: black;
+            font-size: 18px;
+            padding: 10px;
+            cursor: pointer;
+            text-align: left;
+            transition: background-color 0.3s;
+            width: 100%;
+        }
+
+        .sidebar button:hover {
+            background-color: #f4b078;
+        }
+
+        .sidebar .logout {
+            background-color: black;
+            color: white;
+            font-weight: bold;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .content {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #e5b566; /* beige */
+            flex-direction: column; /* Stack items vertically */
+        }
+        
+        .text-box {
+            width: 200px;
+            height: 30px;
+            font-size: 16px;
+            padding: 5px;
+        }
+        
+        .generate-button {
+            margin-top: 10px;
+            display: block;
+            padding: 10px;
+        }
+        
+        /* QR Code Styling */
+        #qrCode {
+            margin-top: 20px;
+        }
+        
+        .download-button {
+            margin-top: 10px;
+            display: none; /* Hide by default */
+            padding: 10px;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div>
+                <button>Dashboard</button>
+                <a href="additem.html">
+                    <button>Add item</button>
+                </a>
+                <a href="listitem.html">
+                    <button>List item</button>
+                </a>
+                <a href="order.html">
+                    <button>Order</button>
+                </a>
+                <a href="generate.html">
+                    <button>Generate</button>
+                </a>
+            </div>
+            <button class="logout">Logout</button>
+        </div>
+
+        <div class="content">
+            <input type="text" class="text-box" id="inputText" placeholder="Enter text here">
+            <button class="generate-button" id="generateButton">Generate</button>
+            <div id="qrCode"></div> <!-- QR Code display area -->
+            <a id="downloadLink" class="download-button" download="qrcode.png">Download QR Code</a> <!-- Download link -->
+            <button id="downloadPdf" class="download-button">Download as PDF</button> <!-- Download PDF button -->
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $('#generateButton').click(function() {
+                const text = $('#inputText').val();
+                $('#qrCode').empty(); // Clear previous QR code
+                $('#downloadLink').hide(); // Hide download link initially
+                $('#downloadPdf').hide(); // Hide PDF download button initially
+                
+                if (text) {
+                    // Generate the QR code
+                    $('#qrCode').qrcode({
+                        text: text,
+                        width: 128, // Width of QR code
+                        height: 128 // Height of QR code
+                    });
+
+                    // Create the download link
+                    const canvas = $('#qrCode canvas')[0]; // Get the generated canvas element
+                    const link = $('#downloadLink');
+                    link.attr('href', canvas.toDataURL('image/png')); // Convert canvas to PNG
+                    link.show(); // Show the download link
+
+                    // Enable PDF download button
+                    $('#downloadPdf').show();
+                } else {
+                    alert("Please enter text to generate QR code.");
+                }
+            });
+
+            // Download PDF functionality
+            $('#downloadPdf').click(function() {
+                const { jsPDF } = window.jspdf; // Get jsPDF from the window object
+                const doc = new jsPDF();
+                const canvas = $('#qrCode canvas')[0]; // Get the QR code canvas
+                const imgData = canvas.toDataURL('image/png'); // Convert canvas to PNG
+
+                doc.addImage(imgData, 'PNG', 10, 10, 180, 180); // Add the image to the PDF
+                doc.save('qrcode.pdf'); // Save the PDF
+            });
+        });
+    </script>
+</body>
+</html>

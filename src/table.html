@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Styled Sidebar with Input Form and Table</title>
+    <link rel="stylesheet" href="../css/table.css"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Font Awesome for icons -->
+</head>
+<body>
+
+    <div class="sidebar">
+        <h2>Adding table</h2>
+        <div>
+            <a href="dashboard.html"><button><i class="fas fa-home"></i> Dashboard</button></a>
+            <a href="additem.html"><button class="active"><i class="fas fa-plus-circle"></i> Add Item</button></a>
+            <a href="listitem.html"><button><i class="fas fa-list"></i> List Item</button></a>
+            <a href="order.html"><button><i class="fas fa-shopping-cart"></i> Booking</button></a>
+            <a href="table.html"><button><i class="fas fa-table"></i> Table</button></a>
+            <a href="description.html"><button><i class="fas fa-info-circle"></i> Description</button></a>
+            <a href="menu.html"><button><i class="fas fa-utensils"></i> Menu</button></a>
+        </div>
+        <a href="index.html"><button class="logout"><i class="fas fa-sign-out-alt"></i> Logout</button></a>
+    </div>
+
+    <div class="main-content">
+        <h1>Table Information</h1>
+
+
+        <div class="input-container">
+            <label for="table-name">Table Number:</label>
+            <input type="text" id="table-name" placeholder="Enter table number">
+            
+            <label for="table-description">Capacity:</label>
+            <input type="text" id="table-description" placeholder="Enter table capacity">
+            
+            <!-- Add onclick event to trigger the addTable function -->
+            <button class="add-button" onclick="addTable()">Add Table</button>
+        </div>
+        
+        <!-- Modal -->
+        <div id="modal" class="modal">
+            <div class="modal-content">
+                <span id="close-modal">&times;</span>
+                <p id="modal-message"></p>
+            </div>
+        </div>
+        
+        
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Table</th>
+                        <th>Capacity</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="table-body">
+                    <!-- New rows will be added here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+   
+
+    
+ <script src="../js/table.js"></script>
+</body>
+</html>

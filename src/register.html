@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Page</title>
+    <link rel="stylesheet" href="../css/register.css">
+</head>
+<body>
+    <div class="left-side">
+        <div class="rrms-logo">
+            <h1>ADMIN</h1>
+            <p class="admin-text"></p>
+        </div>
+    </div>
+    <div class="register-box">
+        <h2>Register</h2>
+        <form id="register-form">
+            <div class="textbox">
+                <input type="text" id="name" name="name" placeholder="Enter your name" required>
+            </div>
+            <div class="textbox">
+                <input type="email" id="email" name="email" placeholder="Enter your email" required>
+            </div>
+            <div class="textbox">
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+            </div>
+            <div class="textbox">
+                <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm your password" required>
+            </div>
+            <button type="submit" class="btn">Register now</button>
+        </form>
+
+        <!-- Success or error message -->
+        <div id="message" style="margin-top: 10px;"></div>
+
+        <p>Already have an account? <a href="index.html">Login</a></p>
+    </div>
+
+    <script src="../js/signup.js"></script>
+</body>
+</html>
